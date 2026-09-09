@@ -7,7 +7,7 @@
    as the live show and lands on the exact same final DOM state -- just
    without the real-time delays.
 
-   Usage: index.html?scene=N   (1-based, matches the printed 01.pdf..NN.pdf)
+   Usage: index.html?page=N (print order); ?scene=N retains source scene numbering.
    Signals completion by setting <html data-print-ready="true">, which the
    Playwright export script waits for before calling page.pdf().
    ========================================================================= */
@@ -73,4 +73,18 @@ async function renderScene(i) {
   document.documentElement.dataset.printReady = 'true';
 }
 
-renderScene(sceneIndexFromURL());
+async function renderPrintPage() {
+  const params = new URLSearchParams(location.search);
+  const requested = Number(params.get('page'));
+  const pageIndex = params.has('scene') ? sceneIndexFromURL() + 1
+    : Number.isInteger(requested) && requested >= 1 && requested <= PRINT_PAGES.length ? requested - 1 : 0;
+  const entry = PRINT_PAGES[pageIndex];
+  document.documentElement.dataset.printPage = String(pageIndex + 1);
+  if (!entry.cover) return renderScene(entry.sceneIndex);
+  document.getElementById('hudTL').textContent = 'PERSONAL ARCHIVE SYSTEM';
+  document.getElementById('hudScene').textContent = 'RECORD ID: BA-19092026-042';
+  buildPrintCover(document.getElementById('sceneRoot'));
+  await document.fonts.ready;
+  document.documentElement.dataset.printReady = 'true';
+}
+renderPrintPage();

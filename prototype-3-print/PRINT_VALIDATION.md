@@ -4,20 +4,21 @@
 
 ## Сцены и формат
 
-**Найдено 10 сцен** в исполняемом массиве `SCENES` исходного `prototype-3/scenes.js`: SC1–SC10. Комментарий о кадре 11 не означает наличия такой сцены. **Создано 10 PDF**, в исходном порядке.
+**Найдено 10 сцен** в исполняемом массиве `SCENES` исходного `prototype-3/scenes.js`: SC1–SC10. Комментарий о кадре 11 не означает наличия такой сцены. **Создано 11 PDF**: новая print-only обложка и 10 исходных сцен в прежнем порядке.
 
 | PDF | Сцена | Страниц | Размер, мм |
 |---|---|---:|---|
-| 01.pdf | ACCESSING PERSONAL ARCHIVE | 1 | 210 × 125 |
-| 02.pdf | LIMITED DATA / THE OBSERVER | 1 | 210 × 125 |
-| 03.pdf | SUBJECT CARD | 1 | 210 × 125 |
-| 04.pdf | 12 MONTHS OF VERSION 41.0 | 1 | 210 × 125 |
-| 05.pdf | PEOPLE AND CONNECTIONS | 1 | 210 × 125 |
-| 06.pdf | KNOWN LOCATIONS | 1 | 210 × 125 |
-| 07.pdf | JOSE'S LEGACY FEATURES | 1 | 210 × 125 |
-| 08.pdf | CORE CHARACTER | 1 | 210 × 125 |
-| 09.pdf | NUMBERS & STATISTICS | 1 | 210 × 125 |
-| 10.pdf | ARCHIVE / VERSION 42.0 | 1 | 210 × 125 |
+| 01.pdf | BIRTHDAY ARCHIVE / CASE FILE | 1 | 210 × 125 |
+| 02.pdf | ACCESSING PERSONAL ARCHIVE | 1 | 210 × 125 |
+| 03.pdf | LIMITED DATA / THE OBSERVER | 1 | 210 × 125 |
+| 04.pdf | SUBJECT CARD | 1 | 210 × 125 |
+| 05.pdf | 12 MONTHS OF VERSION 41.0 | 1 | 210 × 125 |
+| 06.pdf | PEOPLE AND CONNECTIONS | 1 | 210 × 125 |
+| 07.pdf | KNOWN LOCATIONS | 1 | 210 × 125 |
+| 08.pdf | JOSE'S LEGACY FEATURES | 1 | 210 × 125 |
+| 09.pdf | CORE CHARACTER | 1 | 210 × 125 |
+| 10.pdf | NUMBERS & STATISTICS | 1 | 210 × 125 |
+| 11.pdf | ARCHIVE / VERSION 42.0 | 1 | 210 × 125 |
 
 MediaBox, CropBox и TrimBox установлены в 595.275590551 × 354.330708661 pt. Проверка pypdf: отклонение от 210 × 125 мм менее 0.0000001 мм. Прежнее превышение размера Chromium исправлено нормализацией границ PDF; геометрия сцены не масштабируется повторно. Нет bleed, URL, даты печати, браузерных номеров страниц и колонтитулов.
 
@@ -39,26 +40,26 @@ MediaBox, CropBox и TrimBox установлены в 595.275590551 × 354.3307
 
 | Сцена | Изображение | Эффективное dpi |
 |---|---|---:|
-| 03.pdf | photos/s3-portrait.jpg | 729 |
-| 04.pdf | photos/s4-december-dog.png | 2501 |
-| 04.pdf | photos/s4-march-kiss.png | 1955 |
-| 04.pdf | photos/s4-june-boat.jpg | 7045 |
-| 04.pdf | photos/s4-august-beach.jpg | 1920 |
-| 05.pdf | photos/s5-family.jpg | 597 |
-| 05.pdf | photos/s5-colleagues.jpg | 929 |
-| 05.pdf | photos/logo.png | 3211 |
-| 05.pdf | photos/s5-friends-1.jpg | 945 |
-| 05.pdf | photos/s5-friends-2.jpg | 1602 |
-| 05.pdf | photos/s5-friends-3.jpg | 949 |
-| 05.pdf | photos/s5-relationship.jpg | 469 |
-| 06.pdf | photos/s6-malaga-base.png | 600 |
-| 06.pdf | photos/s6-malaga-botanical.png | 600 |
-| 06.pdf | photos/s6-malaga-gibralfaro.png | 600 |
-| 06.pdf | photos/s6-malaga-alcazaba.png | 600 |
-| 06.pdf | photos/s6-malaga-picasso.png | 600 |
-| 06.pdf | photos/s6-malaga-city-centre.png | 600 |
-| 07.pdf | photos/s7-rickandmorty.png | 1369 |
-| 08.pdf | photos/s8-portrait.jpg | 587 |
+| 04.pdf | photos/s3-portrait.jpg | 729 |
+| 05.pdf | photos/s4-december-dog.png | 2501 |
+| 05.pdf | photos/s4-march-kiss.png | 1955 |
+| 05.pdf | photos/s4-june-boat.jpg | 7045 |
+| 05.pdf | photos/s4-august-beach.jpg | 1920 |
+| 06.pdf | photos/s5-family.jpg | 597 |
+| 06.pdf | photos/s5-colleagues.jpg | 929 |
+| 06.pdf | photos/logo.png | 3211 |
+| 06.pdf | photos/s5-friends-1.jpg | 945 |
+| 06.pdf | photos/s5-friends-2.jpg | 1602 |
+| 06.pdf | photos/s5-friends-3.jpg | 949 |
+| 06.pdf | photos/s5-relationship.jpg | 469 |
+| 07.pdf | photos/s6-malaga-base.png | 600 |
+| 07.pdf | photos/s6-malaga-botanical.png | 600 |
+| 07.pdf | photos/s6-malaga-gibralfaro.png | 600 |
+| 07.pdf | photos/s6-malaga-alcazaba.png | 600 |
+| 07.pdf | photos/s6-malaga-picasso.png | 600 |
+| 07.pdf | photos/s6-malaga-city-centre.png | 600 |
+| 08.pdf | photos/s7-rickandmorty.png | 1369 |
+| 09.pdf | photos/s8-portrait.jpg | 587 |
 
 ## Объективные ограничения
 
@@ -73,15 +74,28 @@ MediaBox, CropBox и TrimBox установлены в 595.275590551 × 354.3307
 Экспорт: `cd export && npm ci && npx playwright install chromium && npm run export:pdf`.
 Проверка: `python3 export/validate-pdf.py` (pypdf, Pillow, Poppler). Исходные PNG проверки и JSON доступны локально в `export/qa/`, в Git не включены.
 
+## Проверка новой обложки
+
+- Обложка находится только в `cover.js` print-копии. Web HTML, JS, CSS, навигация и массив SCENES не изменены.
+- Повторно экспортированы и проверены 11 PDF; первый — обложка. Порядок задаёт отдельный PRINT_PAGES.
+- `01.pdf`: ровно одна страница 210 × 125 мм; проверены MediaBox, CropBox, TrimBox.
+- Обложка просмотрена отдельно в рендере 96 dpi (100% CSS-масштаб) и 1600 px, затем рядом с первой сценой. Текст, отступы и линии читаемы, ничего не обрезано.
+- Встроен тот же Roboto Mono; используются существующие CSS variables, `.scene`, `.sc-title`, `.sc-sub`, `.sc-rule`, `.frame` и `.hud`. Масштаб и безопасные поля идентичны остальным PDF.
+- Все заданные надписи присутствуют, включая RECORD ID, шесть metadata-полей, DECLASSIFIED и декоративную строку OPEN FILE →. Фотографий, новых шрифтов, цветов и интерактивных элементов нет.
+- Умеренная архивная композиция: номер дела, таблица метаданных и прямоугольный штамп без официальной символики; анимации, CRT, тени и blur отсутствуют.
+- Все 10 прежних PDF из предыдущего коммита отрендерены тем же Poppler и сравнены с новыми 02–11. **Пиксели полностью идентичны на всех десяти страницах**: изменились только имена файлов.
+- В таблицах выше приведены новые PDF-номера. Упоминания «сцена 3/4/…» обозначают исходные номера, не номера PDF.
+
 SHA-256 окончательных PDF:
 
-- `01.pdf`: `1e323b7273a6a854fcb7e201078575388c03a7a083a8fa1d75e940b24a59e1cd`
-- `02.pdf`: `5321850d95c2d24b5ac6a6113935407c0d1b7aef37c8ab6e575d974f5a17cbff`
-- `03.pdf`: `e12460fc867f087f48e98d60ac3419529bada778088aba43ac69d3058aa86693`
-- `04.pdf`: `6904c449ac9e099f1411683cb6568a92e8bfbb483fb01863e5ed78e040c05b05`
-- `05.pdf`: `bbf6eb04c97381f91bf263f805bd54220a1ebefff7bb9cca7825441b0ecda85f`
-- `06.pdf`: `3a6efaa2ec447041bcab9994b8ff97eb0f17dc61433eeb70b6d26bc72b20c04d`
-- `07.pdf`: `087998c958fb3779be53efd6c58984a115c7ddb8d1a9b18220058705f7336e9a`
-- `08.pdf`: `c13d6210173366db2e458e065686f9b573dd96cddbec3ede7e2242a2a45f966b`
-- `09.pdf`: `936692cf868644e6d8ec8e9bfa9466c911d4e7d4957d5520745fb38c92ef0cd4`
-- `10.pdf`: `acdc78abb3d4a02ca2185b189fb528e1593f536bf8100129ee01c6a8c7c6d3d5`
+- `01.pdf`: `551bcbffe5d19f94594cf65d750a57d4414ae1c249362d372927bc734c071136`
+- `02.pdf`: `85dbd880ca746102a93e3f90934e174788d7d7f3ad75efddbb0bc8f366503cd2`
+- `03.pdf`: `c624591411dc4109f207b1ac0d7fdf460e204248c7bba1c28b4dc54b90d8aecd`
+- `04.pdf`: `405cd4a10ab6796115da30c9532f5c4692eb250d9403213d60ddf84cd12adffc`
+- `05.pdf`: `25e187bc4c08c93303332f4e0f7910b8b6c7d6b5e3a5841e75c86c0a5dfc44a1`
+- `06.pdf`: `d682e8d2a709b6883ae9ad0032757c579972f5c27584f3209f8e290514c74a40`
+- `07.pdf`: `c3830c23ae98ae2a7877352e434aee3ca8212eff6391d44174caeec6eb34e8fa`
+- `08.pdf`: `bae2fc151cd0dfcc41cef09dcabf9a969e2de8cbaffaa5548cb69d279adc98ce`
+- `09.pdf`: `668da6333f80c387c79b3cfa6dead16822e764b11b073de6a47bc4c7a6d90da2`
+- `10.pdf`: `560ec0fb43e3870bb665ce0c103078c484918280e42f74e956a476a5f28f33f2`
+- `11.pdf`: `a7dc2bc02eddd8ffb46318536b3d3e29b91a9797b0dbb0e030a014b4013d3c62`

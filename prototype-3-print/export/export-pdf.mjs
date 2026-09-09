@@ -22,12 +22,12 @@ async function main() {
     page.on('requestfailed', r => errors.push(r.url() + ': ' + r.failure()?.errorText));
     await page.route('https://**/*', route => route.abort());
     const url = pathToFileURL(path.join(root, 'index.html')).href;
-    await page.goto(url + '?scene=1');
-    const count = await page.evaluate(() => SCENES.length);
+    await page.goto(url + '?page=1');
+    const count = await page.evaluate(() => PRINT_PAGES.length);
     const report = [];
     for (let i=1; i<=count; i++) {
       const n = String(i).padStart(2,'0');
-      await page.goto(url + '?scene=' + i);
+      await page.goto(url + '?page=' + i);
       await page.waitForFunction(() => document.documentElement.dataset.printReady === 'true', null, {timeout:30000});
       await page.evaluate(async () => {
         await document.fonts.ready;
@@ -58,7 +58,7 @@ async function main() {
           const range=document.createRange();range.selectNodeContents(node);
           text.push({text:node.textContent,pointSize:parseFloat(s.fontSize)*0.472441*72/96,rects:[...range.getClientRects()].map(r=>[r.x,r.y,r.width,r.height])});
         }
-        return {text:document.querySelector('#sceneRoot').innerText,textRects:text,images:imgs,technicalImages,stage:[stage.x,stage.y,stage.width,stage.height],background:getComputedStyle(document.body).backgroundColor,sceneCount:SCENES.length,title:C.menu[Number(new URLSearchParams(location.search).get('scene'))-1]};
+        return {text:document.querySelector('#sceneRoot').innerText,textRects:text,images:imgs,technicalImages,stage:[stage.x,stage.y,stage.width,stage.height],background:getComputedStyle(document.body).backgroundColor,sceneCount:SCENES.length,title:PRINT_PAGES[Number(document.documentElement.dataset.printPage)-1].title};
       });
       if(errors.length) throw new Error(errors.join('\n'));
       const raw=await page.pdf({width:'210mm',height:'125mm',scale:1,printBackground:true,margin:{top:0,right:0,bottom:0,left:0},displayHeaderFooter:false,preferCSSPageSize:true});

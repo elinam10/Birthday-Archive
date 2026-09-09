@@ -10,6 +10,10 @@ QA = ROOT / 'export/qa'
 PDFS = sorted((ROOT / 'pdf').glob('[0-9][0-9].pdf'))
 manifest = json.loads((QA/'manifest.json').read_text())
 assert len(PDFS) == len(manifest)
+first_data=json.loads((QA/'01.json').read_text())
+assert len(PDFS) == first_data['sceneCount'] + 1
+assert manifest[0]['title'] == 'BIRTHDAY ARCHIVE / CASE FILE'
+assert [p.name for p in PDFS] == [f'{i:02}.pdf' for i in range(1,len(PDFS)+1)]
 normalize = lambda s: re.sub(r'[^a-zA-Z0-9À-ž]', '', s).lower()
 results=[]
 for path in PDFS:

@@ -1,7 +1,7 @@
 # Birthday Archive — Print Edition
 
 Отдельная печатная копия всех **10 реальных сцен** из `../prototype-3/scenes.js`.
-Web-версия не изменена. Готовые файлы: `pdf/01.pdf` … `pdf/10.pdf`.
+Web-версия не изменена. Готовые файлы: `pdf/01.pdf` … `pdf/11.pdf`: обложка + 10 сцен.
 Каждый PDF: **1 страница, 210 × 125 мм**, без bleed и браузерных колонтитулов.
 При печати выберите **Actual size / 100%**, отключите Fit to Page.
 
@@ -28,7 +28,11 @@ CHROME_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" npm r
 
 ## Предпросмотр и проверка
 
-Откройте `index.html?scene=1` … `index.html?scene=10` через локальный сервер:
+Обложка: `index.html?page=1` (или без параметров). Полный печатный набор:
+`index.html?page=1` … `index.html?page=11`. Параметры `?scene=1` … `?scene=10`
+по-прежнему открывают исходные сцены, без сдвига их внутренних номеров.
+
+Локальный сервер:
 
 ```bash
 cd prototype-3-print
@@ -52,6 +56,9 @@ python3 export/validate-pdf.py
 
 ## Устройство
 
+- `cover.js` содержит только печатную обложку и массив `PRINT_PAGES`.
+  `01.pdf` — обложка; `02.pdf`–`11.pdf` — прежние сцены 1–10.
+  Web-массив `SCENES` не изменён.
 - `content.js`, `engine.js`, `scenes.js` — точные копии web-исходников.
 - `print-app.js` доводит исходный таймлайн до финального состояния в instant-mode,
   выключает звук и останавливает бесконечные эффекты.
