@@ -11,17 +11,17 @@
   <body>
     <canvas id="matrixCanvas" aria-hidden="true"></canvas>
     <div class="noise"></div>
-    <section class="access-gate" id="accessGate" aria-labelledby="accessTitle">
+    <section class="access-gate" id="accessGate" lang="en" aria-labelledby="accessTitle">
       <div class="access-window">
         <header><span>BIRTHDAY ARCHIVE · ACCESS CONTROL</span><i></i><i></i><i></i></header>
         <div class="access-body">
           <p>PRIVATE ARCHIVE</p>
-          <h1 id="accessTitle">ВВЕДИТЕ<br>ПАРОЛЬ</h1>
+          <h1 id="accessTitle">ENTER<br>PASSWORD</h1>
           <form id="accessForm">
-            <label for="accessCode">КОД ДОСТУПА · 4 ЦИФРЫ</label>
+            <label for="accessCode">ACCESS CODE · 4 DIGITS</label>
             <div>
               <input id="accessCode" name="accessCode" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="off" aria-describedby="accessMessage" required autofocus>
-              <button type="submit">ВОЙТИ →</button>
+              <button type="submit">ENTER →</button>
             </div>
             <small id="accessMessage" role="status" aria-live="polite">STATUS: WAITING FOR INPUT</small>
           </form>
