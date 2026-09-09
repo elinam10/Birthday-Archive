@@ -347,11 +347,11 @@ const SC4 = {
     await type(ctx, r.H.t, C.s4.title, 28); show(r.H.rule);
     await ctx.wait(1300);
     show(r.meta);
+    Snd.play('music');
     await ctx.wait(520);
     for (let i = 0; i < r.cards.length; i++) {
       const c = r.cards[i];
       c.classList.add('enter');
-      if (i === 0) Snd.play('music'); /* музыка стартует с 00:00 ровно при появлении карточки "Октябрь" */
       await ctx.wait(620);
       c.classList.remove('enter');
       c.classList.add('settle');

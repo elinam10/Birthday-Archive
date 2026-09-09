@@ -24,34 +24,33 @@ Snd.load('music', '../assets/sounds/matrix-clubbed-to-death.mp3', true, .26);
 Snd.load('outro', '../assets/sounds/matrix-monitor.mp3',      false, .40);
 Snd.load('mario', '../assets/sounds/mario-level-complete.mp3', false, .55);
 
-/* ---------------- фейд музыки по её собственному времени ----------------
-   Кадр 9 → Кадр 10 больше не связан с ctx.wait()/таймингом сцены: фейд и
-   переход считаются исключительно по currentTime самого трека 'music' —
-   00:00–05:50 обычная громкость, 05:50–05:53 плавный фейд, с 05:53
-   громкость 0 и трек на паузе. Переход в Кадр 10 срабатывает ровно в этот
-   момент, только если в этот момент реально показан Кадр 9 (cur === 8) и
-   включён автоплей — иначе просто молча замолкает там, где сейчас стоим. */
+/* Музыка обрывается на 05:53; через секунду — переход 9 → 10 при автоплее. */
 function watchMusicFade() {
   const a = Snd.tracks.music;
   if (!a) return;
-  const FADE_START = 350, FADE_END = 353;
-  let baseVolume = a.volume;
+  const STOP_AT = 353;
+  const baseVolume = a.volume;
   let done = false;
+  let transitionTimer;
   a.addEventListener('play', () => {
-    if (a.currentTime < FADE_START) { done = false; a.volume = baseVolume; }
+    if (a.currentTime < STOP_AT) {
+      clearTimeout(transitionTimer);
+      done = false;
+      a.volume = baseVolume;
+    }
   });
   a.addEventListener('timeupdate', () => {
     if (done) return;
-    const t = a.currentTime;
-    if (t < FADE_START) { baseVolume = a.volume; return; }
-    if (t < FADE_END) {
-      a.volume = Math.max(0, baseVolume * (1 - (t - FADE_START) / (FADE_END - FADE_START)));
-      return;
-    }
+    if (a.currentTime < STOP_AT) return;
+    done = true;
     a.volume = 0;
     a.pause();
-    done = true;
-    if (E.autoplay && cur === 8) goTo(9);
+    if (E.autoplay && cur === 8) {
+      const token = E.token;
+      transitionTimer = setTimeout(() => {
+        if (done && E.token === token && E.autoplay && cur === 8) goTo(9);
+      }, 1000);
+    }
   });
 }
 watchMusicFade();
@@ -122,7 +121,7 @@ async function goTo(i) {
   fit();
 
   /* Переход 9 → 10 больше не держит паузу здесь — см. watchMusicFade()
-     ниже: он сам вызывает goTo(9) ровно на 05:53 трека, без чёрного экрана. */
+     ниже: он вызывает goTo(9) через секунду после остановки трека на 05:53. */
   gapEl.classList.remove('on');
 
   const ctx = ctxFor(token);
@@ -135,7 +134,7 @@ async function goTo(i) {
   if (E.token !== token || !E.autoplay) return;
 
   /* Переход 9 → 10 не идёт через обычный auto-next: его исключительно
-     запускает watchMusicFade() (ниже) ровно на 05:53 трека музыки, вне
+     запускает watchMusicFade() через секунду после 05:53 трека музыки, вне
      зависимости от того, успела ли доиграть визуальная временная шкала
      Кадра 9. Переход 10 → 11 переходит не по завершению этой функции, а
      строго по событию 'ended' аудио Mario (см. SC10.play()/onMarioEnded
