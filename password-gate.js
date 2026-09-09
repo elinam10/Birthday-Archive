@@ -23,6 +23,7 @@
       return;
     }
     message.textContent = "STATUS: ACCESS GRANTED ✓";
+    sessionStorage.setItem("birthdayArchiveAccess", "granted");
     message.className = "is-success";
     input.disabled = true;
     selector.classList.add("is-authorized");
