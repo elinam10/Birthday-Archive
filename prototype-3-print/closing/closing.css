@@ -1,0 +1,20 @@
+/* Closing documents only; inherits all palette, fonts, framing and page geometry. */
+.closing-page, .closing-page * { animation:none !important; }
+.assessment-meta { display:flex; gap:44px; margin-top:22px; color:var(--g-dim); font-size:.95em; letter-spacing:.1em; }
+.assessment-body { display:grid; grid-template-columns:1.35fr 1fr; gap:64px; margin-top:60px; }
+.assessment-lines { margin:0; padding:0; list-style:none; font-size:1.15em; }
+.assessment-lines li { display:flex; gap:10px; align-items:baseline; padding:13px 0; }
+.assessment-lines .leader { flex:1; border-bottom:1px dotted var(--line); }
+.assessment-lines .verdict { color:var(--g-mid); white-space:nowrap; }
+.assessment-decision { border-left:1px solid var(--line); padding:12px 0 12px 32px; }
+.assessment-decision h2 { margin:20px 0 0; color:var(--g-bright); font-size:2.1em; line-height:1.4; letter-spacing:.05em; }
+.assessment-footer { margin-top:auto; padding-top:22px; border-top:1px dashed var(--line); display:grid; grid-template-columns:repeat(4,1fr); gap:24px; }
+.assessment-footer dt { font-size:.85em; letter-spacing:.1em; color:var(--g-dim); }
+.assessment-footer dd { margin:10px 0 0; font-size:1em; color:var(--g); }
+.closed-main { margin-top:174px; text-align:center; }
+.closed-main .sc-title { font-size:4em; letter-spacing:.05em; }
+.closed-identity { margin-top:24px; font-size:1.15em; line-height:1.8; letter-spacing:.1em; }
+.closed-note { margin-top:76px; font-size:1em; line-height:1.8; letter-spacing:.1em; }
+.closed-note .complete { color:var(--g-mid); margin-bottom:18px; }
+.closed-dates { display:flex; justify-content:center; gap:44px; margin-top:auto; color:var(--g-dim); font-size:.85em; letter-spacing:.1em; }
+.closed-end { margin-top:26px; padding-top:16px; border-top:1px dashed var(--line); text-align:center; color:var(--g-dim); font-size:.85em; letter-spacing:.14em; }
