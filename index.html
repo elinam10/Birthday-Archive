@@ -6,11 +6,29 @@
     <meta name="theme-color" content="#020503">
     <title>Birthday Archive — Prototype 3</title>
     <link rel="stylesheet" href="selector.css">
+    <link rel="stylesheet" href="password-gate.css">
   </head>
   <body>
     <canvas id="matrixCanvas" aria-hidden="true"></canvas>
     <div class="noise"></div>
-    <main class="selector selector--single">
+    <section class="access-gate" id="accessGate" aria-labelledby="accessTitle">
+      <div class="access-window">
+        <header><span>BIRTHDAY ARCHIVE · ACCESS CONTROL</span><i></i><i></i><i></i></header>
+        <div class="access-body">
+          <p>PRIVATE ARCHIVE</p>
+          <h1 id="accessTitle">ВВЕДИТЕ<br>ПАРОЛЬ</h1>
+          <form id="accessForm">
+            <label for="accessCode">КОД ДОСТУПА · 4 ЦИФРЫ</label>
+            <div>
+              <input id="accessCode" name="accessCode" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="off" aria-describedby="accessMessage" required autofocus>
+              <button type="submit">ВОЙТИ →</button>
+            </div>
+            <small id="accessMessage" role="status" aria-live="polite">STATUS: WAITING FOR INPUT</small>
+          </form>
+        </div>
+      </div>
+    </section>
+    <main class="selector selector--single" id="selector">
       <a class="choose start-prototype" href="prototype-3/">
         <span>НАЧАТЬ</span>
         <span>ПРОСМОТР</span>
@@ -23,5 +41,6 @@
     </main>
     <script src="prototype-3/version.js"></script>
     <script src="selector.js"></script>
+    <script src="password-gate.js"></script>
   </body>
 </html>
