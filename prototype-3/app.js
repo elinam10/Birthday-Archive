@@ -24,10 +24,10 @@ Snd.load('music', '../assets/sounds/matrix-clubbed-to-death.mp3', true, .26);
 Snd.load('outro', '../assets/sounds/matrix-monitor.mp3',      false, .40);
 Snd.load('mario', '../assets/sounds/mario-level-complete.mp3', false, .55);
 
-/* Только music: 352 — dry OFF, короткое эхо; 353 — тишина; 354 — Scene 10. */
+/* Только music: 353 — dry OFF, короткое эхо; 354 — тишина; 355 — Scene 10. */
 function watchMusicEnding() {
   const a = Snd.tracks.music;
-  const baseVolume = a.volume, STOP_AT = 352;
+  const baseVolume = a.volume, STOP_AT = 353;
   let graph, endingStarted = false, cutAt;
   let stopTimer, silenceTimer, transitionTimer;
 
@@ -199,7 +199,7 @@ async function goTo(i) {
   fit();
 
   /* Переход 9 → 10 больше не держит паузу здесь — см. watchMusicEnding()
-     ниже: он вызывает goTo(9) после hard stop на 05:52, секунды эха и секунды тишины. */
+     ниже: он вызывает goTo(9) после hard stop на 05:53, секунды эха и секунды тишины. */
   gapEl.classList.remove('on');
 
   const ctx = ctxFor(token);
@@ -212,7 +212,7 @@ async function goTo(i) {
   if (E.token !== token || !E.autoplay) return;
 
   /* Переход 9 → 10 не идёт через обычный auto-next: его исключительно
-     запускает watchMusicEnding() после hard stop на 05:52, секунды эха и секунды тишины, вне
+     запускает watchMusicEnding() после hard stop на 05:53, секунды эха и секунды тишины, вне
      зависимости от того, успела ли доиграть визуальная временная шкала
      Кадра 9. Переход 10 → 11 переходит не по завершению этой функции, а
      строго по событию 'ended' аудио Mario (см. SC10.play()/onMarioEnded
