@@ -24,36 +24,114 @@ Snd.load('music', '../assets/sounds/matrix-clubbed-to-death.mp3', true, .26);
 Snd.load('outro', '../assets/sounds/matrix-monitor.mp3',      false, .40);
 Snd.load('mario', '../assets/sounds/mario-level-complete.mp3', false, .55);
 
-/* Музыка обрывается на 05:53; через секунду — переход 9 → 10 при автоплее. */
-function watchMusicFade() {
+/* Только music: 352 — dry OFF, короткое эхо; 353 — тишина; 354 — Scene 10. */
+function watchMusicEnding() {
   const a = Snd.tracks.music;
-  if (!a) return;
-  const STOP_AT = 353;
-  const baseVolume = a.volume;
-  let done = false;
-  let transitionTimer;
-  a.addEventListener('play', () => {
-    if (a.currentTime < STOP_AT) {
-      clearTimeout(transitionTimer);
-      done = false;
-      a.volume = baseVolume;
-    }
-  });
-  a.addEventListener('timeupdate', () => {
-    if (done) return;
-    if (a.currentTime < STOP_AT) return;
-    done = true;
-    a.volume = 0;
+  const baseVolume = a.volume, STOP_AT = 352;
+  let graph, endingStarted = false, cutAt;
+  let stopTimer, silenceTimer, transitionTimer;
+
+  function gains(dry, send, wet) {
+    if (!graph) return;
+    const now = graph.ac.currentTime;
+    [graph.dry, graph.send, graph.wet].forEach((node, i) => {
+      node.gain.cancelScheduledValues(now);
+      node.gain.setValueAtTime([dry, send, wet][i], now);
+    });
+  }
+  function reset() {
+    clearTimeout(stopTimer);
+    clearTimeout(silenceTimer);
+    clearTimeout(transitionTimer);
+    endingStarted = false;
+    cutAt = null;
+    a.volume = baseVolume;
+    gains(1, 1, 0);
+    if (!graph) return;
+    // Новые delay buffers исключают остаток прошлого хвоста при replay.
+    graph.send.disconnect();
+    graph.taps.forEach(node => node.disconnect());
+    graph.taps = [];
+    [0.28, 0.56, 0.84].forEach((seconds, i) => {
+      const delay = graph.ac.createDelay(1), level = graph.ac.createGain();
+      delay.delayTime.value = seconds;
+      level.gain.value = [0.36, 0.16, 0.07][i];
+      graph.send.connect(delay).connect(level).connect(graph.wet);
+      graph.taps.push(delay, level);
+    });
+  }
+  function connect() {
+    if (graph) return;
+    Snd.unlockType();
+    const ac = Snd.typeCtx;
+    const source = ac.createMediaElementSource(a);
+    const dry = ac.createGain(), send = ac.createGain();
+    const wet = ac.createGain(), output = ac.createGain();
+    graph = { ac, dry, send, wet, output, taps: [] };
+    output.gain.value = a.muted ? 0 : 1;
+    source.connect(dry).connect(output);
+    source.connect(send);
+    wet.connect(output).connect(ac.destination);
+    reset();
+  }
+  function finish() {
+    if (endingStarted || a.paused) return;
+    if (a.currentTime < STOP_AT) { schedule(); return; }
+    endingStarted = true;
+    clearTimeout(stopTimer);
+    const now = graph.ac.currentTime;
+    const end = cutAt == null ? now : cutAt;
+    gains(0, 0, 1);
+    graph.wet.gain.setValueAtTime(0, Math.max(now, end + 1));
+    // Delay buffers уже содержат последние 0.84 с; pause не обрывает их.
     a.pause();
-    if (E.autoplay && cur === 8) {
-      const token = E.token;
-      transitionTimer = setTimeout(() => {
-        if (done && E.token === token && E.autoplay && cur === 8) goTo(9);
-      }, 1000);
-    }
+    const token = E.token;
+    silenceTimer = setTimeout(() => {
+      graph.wet.gain.value = 0;
+      a.volume = 0;
+    }, Math.max(0, end + 1 - now) * 1000);
+    transitionTimer = setTimeout(() => {
+      if (endingStarted && E.token === token && E.autoplay && cur === 8) goTo(9);
+    }, Math.max(0, end + 2 - now) * 1000);
+  }
+  function schedule() {
+    if (!graph || endingStarted || a.paused || a.seeking || graph.ac.state !== 'running') return;
+    clearTimeout(stopTimer);
+    const remaining = Math.max(0, (STOP_AT - a.currentTime) / a.playbackRate);
+    cutAt = graph.ac.currentTime + remaining;
+    gains(1, 1, 0);
+    // Audio clock обеспечивает резкую границу, даже между timeupdate.
+    graph.dry.gain.setValueAtTime(0, cutAt);
+    graph.send.gain.setValueAtTime(0, cutAt);
+    graph.wet.gain.setValueAtTime(1, cutAt);
+    graph.wet.gain.setValueAtTime(0, cutAt + 1);
+    if (!remaining) finish();
+    else stopTimer = setTimeout(finish, remaining * 1000);
+  }
+  function suspendSchedule() {
+    if (endingStarted) return;
+    clearTimeout(stopTimer);
+    cutAt = null;
+    gains(1, 1, 0);
+  }
+  a.addEventListener('play', () => {
+    connect();
+    if (a.currentTime < STOP_AT) reset();
+    graph.ac.resume().then(schedule).catch(() => {});
   });
+  ['playing', 'timeupdate', 'ratechange'].forEach(event => a.addEventListener(event, schedule));
+  ['pause', 'waiting', 'seeking'].forEach(event => a.addEventListener(event, suspendSchedule));
+  a.addEventListener('seeked', () => {
+    if (endingStarted && a.currentTime < STOP_AT) reset();
+    schedule();
+  });
+  // Существующий mute должен отключать и уже накопленный echo buffer.
+  a.addEventListener('volumechange', () => {
+    if (graph) graph.output.gain.value = a.muted ? 0 : 1;
+  });
+  return reset;
 }
-watchMusicFade();
+const resetMusicEnding = watchMusicEnding();
 
 /* ---------------- масштабирование сцены под экран ---------------- */
 /* тот же брейкпоинт, что и в styles.css: мобильная (портретная) раскладка
@@ -106,7 +184,7 @@ async function goTo(i) {
   E.typingSound = false;
   E.deniedAlert = false;
   if (cur >= 0 && SCENES[cur].stop) SCENES[cur].stop(refs[cur]);
-  if (i < 3 || i > 8) Snd.stop('music');
+  if (i <= 3 || i > 8) { Snd.stop('music'); resetMusicEnding(); }
 
   E.token++;
   const token = E.token;
@@ -120,8 +198,8 @@ async function goTo(i) {
   updateHUD();
   fit();
 
-  /* Переход 9 → 10 больше не держит паузу здесь — см. watchMusicFade()
-     ниже: он вызывает goTo(9) через секунду после остановки трека на 05:53. */
+  /* Переход 9 → 10 больше не держит паузу здесь — см. watchMusicEnding()
+     ниже: он вызывает goTo(9) после hard stop на 05:52, секунды эха и секунды тишины. */
   gapEl.classList.remove('on');
 
   const ctx = ctxFor(token);
@@ -134,7 +212,7 @@ async function goTo(i) {
   if (E.token !== token || !E.autoplay) return;
 
   /* Переход 9 → 10 не идёт через обычный auto-next: его исключительно
-     запускает watchMusicFade() через секунду после 05:53 трека музыки, вне
+     запускает watchMusicEnding() после hard stop на 05:52, секунды эха и секунды тишины, вне
      зависимости от того, успела ли доиграть визуальная временная шкала
      Кадра 9. Переход 10 → 11 переходит не по завершению этой функции, а
      строго по событию 'ended' аудио Mario (см. SC10.play()/onMarioEnded
