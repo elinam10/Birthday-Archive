@@ -8,6 +8,7 @@
     "export:pdf": "node export-pdf.mjs"
   },
   "devDependencies": {
-    "playwright": "^1.48.0"
+    "playwright": "1.62.1",
+    "pdf-lib": "1.17.1"
   }
 }

@@ -1,179 +1,87 @@
-# Print Validation Report
+# PRINT VALIDATION
 
-Generated for the `pdf/` output of `prototype-3-print`, produced by
-`export/export-pdf.mjs` (Playwright + Chromium). Every check below was run
-against the actual exported files, not just eyeballed against the source.
+Проверено 9 сентября 2026 года. Отчёт относится к повторно созданным реальным PDF в `pdf/`.
 
-## 1. Scene / PDF count
+## Сцены и формат
 
-`scenes.js` currently defines **10 scenes** (`SCENES.length === 10`, read
-live from the page by the export script, not hardcoded). **10 PDFs** were
-produced: `01.pdf` … `10.pdf`, one per scene, in source order:
+**Найдено 10 сцен** в исполняемом массиве `SCENES` исходного `prototype-3/scenes.js`: SC1–SC10. Комментарий о кадре 11 не означает наличия такой сцены. **Создано 10 PDF**, в исходном порядке.
 
-| PDF | Scene (`C.menu`) |
-|-----|-------------------|
-| 01.pdf | ACCESSING PERSONAL ARCHIVE |
-| 02.pdf | LIMITED DATA / THE OBSERVER |
-| 03.pdf | SUBJECT CARD |
-| 04.pdf | 12 MONTHS OF VERSION 41.0 |
-| 05.pdf | PEOPLE AND CONNECTIONS |
-| 06.pdf | KNOWN LOCATIONS |
-| 07.pdf | JOSE'S LEGACY FEATURES |
-| 08.pdf | CORE CHARACTER |
-| 09.pdf | NUMBERS & STATISTICS |
-| 10.pdf | ARCHIVE / VERSION 42.0 |
+| PDF | Сцена | Страниц | Размер, мм |
+|---|---|---:|---|
+| 01.pdf | ACCESSING PERSONAL ARCHIVE | 1 | 210 × 125 |
+| 02.pdf | LIMITED DATA / THE OBSERVER | 1 | 210 × 125 |
+| 03.pdf | SUBJECT CARD | 1 | 210 × 125 |
+| 04.pdf | 12 MONTHS OF VERSION 41.0 | 1 | 210 × 125 |
+| 05.pdf | PEOPLE AND CONNECTIONS | 1 | 210 × 125 |
+| 06.pdf | KNOWN LOCATIONS | 1 | 210 × 125 |
+| 07.pdf | JOSE'S LEGACY FEATURES | 1 | 210 × 125 |
+| 08.pdf | CORE CHARACTER | 1 | 210 × 125 |
+| 09.pdf | NUMBERS & STATISTICS | 1 | 210 × 125 |
+| 10.pdf | ARCHIVE / VERSION 42.0 | 1 | 210 × 125 |
 
-(The original project briefly had an 11th "data recovery" scene; it was
-removed from `scenes.js` — and therefore from the web version too — before
-this print work started, at the user's request in this same session. There
-is no scene 11 to carry over.)
+MediaBox, CropBox и TrimBox установлены в 595.275590551 × 354.330708661 pt. Проверка pypdf: отклонение от 210 × 125 мм менее 0.0000001 мм. Прежнее превышение размера Chromium исправлено нормализацией границ PDF; геометрия сцены не масштабируется повторно. Нет bleed, URL, даты печати, браузерных номеров страниц и колонтитулов.
 
-## 2. Page count and physical size
+## Содержание и визуальная проверка
 
-Checked with `pdfinfo` on every file:
+- Каждый окончательный PDF отрендерен Poppler в отдельный PNG шириной 1600 px и просмотрен; также проверен обзор всех страниц.
+- `content.js`, `engine.js`, `scenes.js` побайтово совпадают с web-версией. Все финальные текстовые узлы сверены с извлечённым текстом PDF (нормализация пробелов и пунктуации); пропусков не найдено. Эмодзи и пунктуация дополнительно проверены визуально.
+- В каждой сцене одинаковый transform и холст; поля 5 мм слева/справа, 6.25 мм сверху/снизу. Текст находится внутри безопасной области, фотографии не растянуты; исходные object-fit, crop и object-position сохранены.
+- Все растровые ресурсы, включая 6 слоёв карты, успешно загружены. Фотографии и иллюстрации побайтово совпадают с web-исходниками; CSS-фильтров и зелёных наложений нет.
+- Все интерфейсные цвета используют заданную печатную палитру: #F1F3EC, #173C2A, #294B38, #2B6747, #536A5B, #607B69 и их прозрачные оттенки. Цвета фото и эмодзи сохранены.
+- Glow, blur, тени, CRT-наложения, scanlines, курсор и кнопки просмотра исключены. Финальные значения прогресса и текст таймлайна видны; бегущие кактусы сохранены как четыре неподвижных цветных эмодзи.
+- Карта Málaga согласована с печатной палитрой; региональная схема остаётся векторной. Нет добавленных логотипов/печатей FBI: используется исходный сдержанный archive/terminal язык.
+- Сцена 3: повторно экспортирована после визуальной проверки. Верхние 17% портрета плавно проявляются через градиент прозрачности — адаптацию исходного photo-fade. Жёсткий верхний край и линия фона смягчены, лицо и его цвет не изменены, blur не применяется.
+- Все PDF-шрифты встроены: проверены FontFile/FontFile2/FontFile3 либо CharProcs для Type 3. Цветные emoji-глифы просмотрены на сценах 03–10.
 
-- **Pages: 1** for all 10 PDFs — confirmed individually, not assumed.
-- **Page size: 595.92 × 354.96 pt** for all 10 PDFs, identical across the
-  set (so nothing shifts size page to page).
+## Разрешение исходников
 
-Converted to mm: **210.23 × 125.22mm** — a consistent ~0.23mm oversize
-against the nominal 210 × 125mm on both dimensions. This was traced to
-Chromium's own PDF engine (reproduced identically via a raw CDP
-`Page.printToPDF` call, bypassing Playwright entirely, and identically
-whether the requested size is given in `mm` or `in`) — Chromium snaps the
-requested paper size to its internal print raster before laying out the
-page. It is not something fixable from the page/script side. At ~0.23mm
-(under a quarter of a millimetre) it is imperceptible and well inside
-normal print/cutting tolerance, and — critically — it is the *same* on
-every page, so relative composition between pages is unaffected.
+Расчёт по натуральному размеру файла и фактическому размеру изображения на странице, с учётом contain/cover и CSS-transform. Апскейл не применялся. **Изображений ниже 300 dpi нет**. Минимум среди фото: примерно 469 dpi (`s5-relationship.jpg`). Карта и все её слои: примерно 600 dpi.
 
-## 3. Content — text, photos, order, composition
+| Сцена | Изображение | Эффективное dpi |
+|---|---|---:|
+| 03.pdf | photos/s3-portrait.jpg | 729 |
+| 04.pdf | photos/s4-december-dog.png | 2501 |
+| 04.pdf | photos/s4-march-kiss.png | 1955 |
+| 04.pdf | photos/s4-june-boat.jpg | 7045 |
+| 04.pdf | photos/s4-august-beach.jpg | 1920 |
+| 05.pdf | photos/s5-family.jpg | 597 |
+| 05.pdf | photos/s5-colleagues.jpg | 929 |
+| 05.pdf | photos/logo.png | 3211 |
+| 05.pdf | photos/s5-friends-1.jpg | 945 |
+| 05.pdf | photos/s5-friends-2.jpg | 1602 |
+| 05.pdf | photos/s5-friends-3.jpg | 949 |
+| 05.pdf | photos/s5-relationship.jpg | 469 |
+| 06.pdf | photos/s6-malaga-base.png | 600 |
+| 06.pdf | photos/s6-malaga-botanical.png | 600 |
+| 06.pdf | photos/s6-malaga-gibralfaro.png | 600 |
+| 06.pdf | photos/s6-malaga-alcazaba.png | 600 |
+| 06.pdf | photos/s6-malaga-picasso.png | 600 |
+| 06.pdf | photos/s6-malaga-city-centre.png | 600 |
+| 07.pdf | photos/s7-rickandmorty.png | 1369 |
+| 08.pdf | photos/s8-portrait.jpg | 587 |
 
-Every page was rendered to a 150dpi PNG (`pdftoppm`) and visually reviewed:
+## Объективные ограничения
 
-- All body text from `content.js` present on the expected scene, with no
-  copy changes.
-- All photos present, in full color (see §5).
-- Scene order matches the table in §1 exactly, 1 → 10, no gaps or repeats.
-- Every scene uses the same fixed contain-and-center transform (a single
-  hardcoded `translate(5mm, 6.25mm) scale(0.472441)` in `print.css`, not
-  computed per scene), so the composition sits at the same size and
-  position on every page — confirmed visually across all 10 renders.
-- Frame corner brackets and the top/bottom HUD labels sit consistently
-  inside a safe margin on every page; no text, photo or line touches the
-  physical page edge on any of the 10 pages.
-- No cropped/clipped content: the densest scene (04, twelve month-cards in
-  a 6×2 grid) was the main risk here — it initially DID overflow the page
-  (see §7, "issue found and fixed") and was re-verified after the fix.
+- Плотность исходной композиции: минимальный текст сцены 04 около 3.74 pt, сцены 07 около 4.10 pt, сцены 08 около 4.14 pt, сцены 09 около 3.86 pt. Он резкий и не обрезан, но при физическом размере страницы мелкий. Увеличение всех подписей потребовало бы изменения композиции либо формата. Рекомендуется контрольная печать одной страницы календаря при 100%.
+- Подписи POI внутри карты Málaga являются частью исходных растровых PNG: около 600 dpi достаточно для изображения, но сами буквы очень мелкие. Превратить их в полноценный крупный векторный текст без переработки карты нельзя.
+- Rick & Morty имеет зелёную гамму в самом оригинальном PNG; это не добавленное тонирование. Резкость деталей определяется исходным файлом, даже при высоком расчётном dpi.
+- Эмодзи воспроизводятся цветными на текущем macOS/Chrome. Их вид может отличаться при экспорте на другой ОС; Roboto Mono поставляется локально, Apple Color Emoji — системный шрифт.
+- Статические строки `CONTINUE? [ YES ]` и `INSTALL UPDATE?` сохранены как часть исходного текста. Анимированные промежуточные значения, которые заменяются к концу таймлайна, не дублируются.
 
-## 4. Print palette
+## Воспроизводимость и контроль
 
-`print.css` sets the six specified colors as the page's design tokens
-(`--bg #F1F3EC`, `--g-bright #173C2A`, `--g #294B38`, `--g-mid #2B6747`,
-`--g-dim #536A5B`, `--line #607B69`), and every hardcoded rgba tint in the
-copied `styles.css` that referenced the old dark-theme greens/red/amber was
-rewritten in place to the matching print color at its original alpha (see
-`README.md` for the exact list). Spot-checked visually on all 10 renders:
-cream background throughout, dark-green headings/body text, muted-green
-borders and rules, no leftover near-black or bright neon-green anywhere.
+Экспорт: `cd export && npm ci && npx playwright install chromium && npm run export:pdf`.
+Проверка: `python3 export/validate-pdf.py` (pypdf, Pillow, Poppler). Исходные PNG проверки и JSON доступны локально в `export/qa/`, в Git не включены.
 
-Three semantic accents that exist in the content but weren't in the six
-specified colors — the red "DENIED"/alert color, the amber "coffee"
-highlight, and the blue Optimus-Poker-logo fallback — were darkened for
-legibility on the light background (e.g. the original `#ff5d47` red is a
-light coral that would be nearly illegible on `#F1F3EC`; it's `#963320` in
-print). This wasn't in the brief's six colors explicitly, so it's called
-out here as a judgment call rather than left unmentioned.
+SHA-256 окончательных PDF:
 
-## 5. Photos vs. technical images
-
-- **Photos of people/places** (portraits, family/friends/colleagues,
-  Torremolinos beach, the boat license photo, Rick & Morty poster, etc.)
-  are untouched — full color, no grayscale, no duotone, no CRT tint. This
-  required overriding two things the web version applies for visual style:
-  the green multiply-tint overlay on `.photo` elements, and the
-  `grayscale(1)` filter the "biometric scan" portrait (Scene 3) had over
-  the actual photo — both removed for print, confirmed visually on Scene 3
-  and Scene 8's portraits.
-- **The Málaga map** (Scene 6) — the one raster "technical image" in the
-  project (a map outline PNG plus five POI pin+label PNG cutouts) — was
-  recolored pixel-by-pixel (`recolor-malaga.py`) from its original
-  neon-green-on-black rendering to the print palette (`#F1F3EC` background,
-  `#607B69` outline, `#173C2A` pin/label text), so it now reads as part of
-  the same light print system as the rest of Scene 6 rather than as a
-  leftover dark-mode asset. It is the only raster image whose colors were
-  altered; every photograph of a person or place keeps its original colors.
-
-## 6. Image resolution vs. 300dpi target
-
-Measured directly (not estimated): for every `<img>` in every scene, actual
-rendered CSS box size at print scale vs. the source file's native pixel
-size, converted to an effective dpi.
-
-**Result: every photo in every scene meets or exceeds 300dpi** — the lowest
-value found across the whole project is ~391dpi (`s5-friends-2.jpg`, one
-axis, in the small Scene 5 friendship collage), and most are 600–3000+dpi
-(the source photos are all phone-camera resolution or higher, displayed at
-modest sizes within the 1600×900 canvas). No image needed upscaling, and
-none is flagged as under the 300dpi target — there is nothing to report as
-a shortfall here.
-
-## 7. Issue found during validation, and the fix
-
-The first export pass had Scene 4 (and only Scene 4, because it's the only
-scene whose grid genuinely needs its full 900px of canvas height) overflow
-its page: the twelve month-cards spilled past the bottom of the printed
-area instead of being contained in a 2×6 grid.
-
-Root cause: `styles.css` has a `@media (max-width:900px)` block that
-switches the *web* version into a stacked mobile layout (full-width
-`#stage`, `.scene` back in normal document flow, single-column grids,
-etc.). The print page's own content box is 210mm ≈ 793.7 CSS px wide at
-the standard 96dpi reference — under that 900px breakpoint — so this
-phone-layout media query was wrongly firing for print, overriding the
-desktop 1600×900 canvas the print transform assumes. Fixed by disabling
-that block (and a second, cosmetic one tweaking letter-spacing) in this
-copy's `styles.css` only — `prototype-3/styles.css` (the actual web
-version) is untouched and keeps its mobile layout for real narrow browser
-windows, where it's supposed to trigger.
-
-Re-exported and re-verified after the fix: Scene 4 (`pdf/04.pdf`) now shows
-all twelve cards in the intended 6×2 grid, fully inside the page, same
-margins as every other scene.
-
-## 8. Fonts
-
-`pdffonts` on the exported PDFs confirms every font is embedded and
-subsetted (`emb yes`, `sub yes` on all rows) — Roboto Mono
-(regular/bold/italic) plus AppleColorEmoji (color, Type 3 — confirming
-emoji embed and render in color, not as monochrome fallback glyphs) and
-Menlo as a system fallback for the handful of symbol glyphs Roboto Mono
-itself doesn't cover (e.g. ↘, ⚠).
-
-## 9. Other checks run
-
-- No JavaScript console errors or page errors across all 10 scene renders.
-- `git status`/`git diff` on the repository confirm `prototype-3/` (the
-  original web version) has zero modifications — this work only ever
-  touched files inside the new `prototype-3-print/` directory.
-- CRT/glow removal verified both by code (a blanket
-  `text-shadow/box-shadow/filter/backdrop-filter: none !important` in
-  `print.css`, `animation-duration: 0s !important` so animations still
-  respect their `forwards`/`backwards` fill state instead of reverting to a
-  pre-animation hidden state) and visually — no scanlines, glow halos, or
-  mid-animation artifacts on any of the 10 renders.
-
-## Objective limitations to flag
-
-- The ~0.23mm page-size oversize from Chromium's PDF engine, per §2 —
-  consistent across all pages, imperceptible, not fixable at this layer.
-- The three darkened semantic accent colors (red/amber/blue) in §4 are a
-  reasonable extrapolation beyond the six colors specified in the brief,
-  not a literal requirement — flagged for the user's awareness/approval
-  rather than silently decided.
-- (Resolved) An earlier revision of this report noted a pre-existing overlap
-  in the original web design between the Scene 3 dinosaur's note text and
-  the bottom-left "SYSTEM STATUS: STABLE" HUD label. The print edition no
-  longer renders that HUD corner at all (removed at the user's request,
-  along with Scene 10's fireworks canvas), so the overlap doesn't occur in
-  print. It's unchanged, and still present, in the live web version.
+- `01.pdf`: `1e323b7273a6a854fcb7e201078575388c03a7a083a8fa1d75e940b24a59e1cd`
+- `02.pdf`: `5321850d95c2d24b5ac6a6113935407c0d1b7aef37c8ab6e575d974f5a17cbff`
+- `03.pdf`: `e12460fc867f087f48e98d60ac3419529bada778088aba43ac69d3058aa86693`
+- `04.pdf`: `6904c449ac9e099f1411683cb6568a92e8bfbb483fb01863e5ed78e040c05b05`
+- `05.pdf`: `bbf6eb04c97381f91bf263f805bd54220a1ebefff7bb9cca7825441b0ecda85f`
+- `06.pdf`: `3a6efaa2ec447041bcab9994b8ff97eb0f17dc61433eeb70b6d26bc72b20c04d`
+- `07.pdf`: `087998c958fb3779be53efd6c58984a115c7ddb8d1a9b18220058705f7336e9a`
+- `08.pdf`: `c13d6210173366db2e458e065686f9b573dd96cddbec3ede7e2242a2a45f966b`
+- `09.pdf`: `936692cf868644e6d8ec8e9bfa9466c911d4e7d4957d5520745fb38c92ef0cd4`
+- `10.pdf`: `acdc78abb3d4a02ca2185b189fb528e1593f536bf8100129ee01c6a8c7c6d3d5`

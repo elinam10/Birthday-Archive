@@ -63,9 +63,10 @@ async function renderScene(i) {
   try {
     await SCENES[i].play(ctx, refs);
   } catch (e) {
-    if (e !== SKIP) console.error(e);
+    throw e;
   }
 
+  if (SCENES[i].stop) SCENES[i].stop(refs);
   await waitForImages(root);
   if (document.fonts && document.fonts.ready) await document.fonts.ready;
 

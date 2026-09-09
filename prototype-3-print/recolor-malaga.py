@@ -32,7 +32,8 @@ def smoothstep(lo, hi, x):
     return t * t * (3 - 2 * t)
 
 def recolor(path, fg):
-    im = Image.open(path).convert('RGB')
+    source = os.path.join(os.path.dirname(__file__), '..', 'prototype-3', 'photos', os.path.basename(path))
+    im = Image.open(source).convert('RGB')
     px = im.load()
     w, h = im.size
     for y in range(h):

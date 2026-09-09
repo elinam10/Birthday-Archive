@@ -351,6 +351,7 @@ const SC4 = {
     for (let i = 0; i < r.cards.length; i++) {
       const c = r.cards[i];
       c.classList.add('enter');
+      if (i === 0) Snd.play('music'); /* музыка стартует с 00:00 ровно при появлении карточки "Октябрь" */
       await ctx.wait(620);
       c.classList.remove('enter');
       c.classList.add('settle');

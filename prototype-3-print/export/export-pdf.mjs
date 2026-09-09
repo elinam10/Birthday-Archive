@@ -1,79 +1,82 @@
 #!/usr/bin/env node
-/* =========================================================================
-   Exports every scene of the Birthday Archive print edition to its own
-   single-page, 210x125mm PDF: pdf/01.pdf, pdf/02.pdf, ... pdf/NN.pdf.
-
-   The number of scenes is read from the running page itself (SCENES.length,
-   the exact same array the web version renders from) rather than a
-   hardcoded count, so this script automatically tracks the real content of
-   scenes.js.
-
-   Usage:  npm run export:pdf   (from prototype-3-print/export/)
-   ========================================================================= */
-import { chromium } from 'playwright';
-import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
 import fs from 'node:fs';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PRINT_ROOT = path.resolve(__dirname, '..');
-const INDEX_FILE = path.join(PRINT_ROOT, 'index.html');
-const OUT_DIR = path.join(PRINT_ROOT, 'pdf');
-
-const MM = { width: '210mm', height: '125mm' };
-/* 96 CSS px per inch, 1in = 25.4mm -- matches the viewport to the physical
-   page size 1:1 so on-screen layout and the printed PDF agree exactly. */
-const VIEWPORT = {
-  width: Math.round((210 / 25.4) * 96),
-  height: Math.round((125 / 25.4) * 96),
-};
+const require = createRequire(import.meta.url);
+const { chromium } = require('playwright');
+const { PDFDocument } = require('pdf-lib');
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const out = path.join(root, 'pdf');
+const qa = path.join(root, 'export', 'qa');
+const target = [210 * 72 / 25.4, 125 * 72 / 25.4];
 
 async function main() {
-  if (!fs.existsSync(INDEX_FILE)) {
-    throw new Error('index.html not found at ' + INDEX_FILE);
-  }
-  fs.mkdirSync(OUT_DIR, { recursive: true });
-
-  const browser = await chromium.launch();
-  const page = await browser.newPage({ viewport: VIEWPORT });
-
-  const fileUrl = 'file://' + INDEX_FILE;
-
-  // Discover the real scene count from the page itself (scene 1, arbitrarily).
-  await page.goto(fileUrl + '?scene=1', { waitUntil: 'load' });
-  const sceneCount = await page.evaluate(() => SCENES.length);
-  console.log('Found', sceneCount, 'scenes in scenes.js');
-
-  for (let i = 1; i <= sceneCount; i++) {
-    const n = String(i).padStart(2, '0');
-    console.log('Rendering scene', n, '...');
-    await page.goto(fileUrl + '?scene=' + i, { waitUntil: 'load' });
-    await page.waitForFunction(
-      () => document.documentElement.dataset.printReady === 'true',
-      { timeout: 30000 }
-    );
-    // one extra frame so the very last paint (fonts/images already awaited
-    // in print-app.js) is definitely flushed before the PDF snapshot
-    await page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
-
-    const outFile = path.join(OUT_DIR, n + '.pdf');
-    await page.pdf({
-      path: outFile,
-      width: MM.width,
-      height: MM.height,
-      printBackground: true,
-      margin: { top: '0mm', right: '0mm', bottom: '0mm', left: '0mm' },
-      displayHeaderFooter: false,
-      preferCSSPageSize: false,
-    });
-    console.log('  ->', path.relative(PRINT_ROOT, outFile));
-  }
-
-  await browser.close();
-  console.log('Done:', sceneCount, 'PDF(s) written to', path.relative(PRINT_ROOT, OUT_DIR) + '/');
+  fs.mkdirSync(out, {recursive:true});
+  fs.mkdirSync(qa, {recursive:true});
+  const browser = await chromium.launch(process.env.CHROME_PATH ? {executablePath:process.env.CHROME_PATH} : {});
+  try {
+    const page = await browser.newPage({viewport:{width:794,height:473}});
+    const errors = [];
+    page.on('pageerror', e => errors.push(String(e)));
+    page.on('requestfailed', r => errors.push(r.url() + ': ' + r.failure()?.errorText));
+    await page.route('https://**/*', route => route.abort());
+    const url = pathToFileURL(path.join(root, 'index.html')).href;
+    await page.goto(url + '?scene=1');
+    const count = await page.evaluate(() => SCENES.length);
+    const report = [];
+    for (let i=1; i<=count; i++) {
+      const n = String(i).padStart(2,'0');
+      await page.goto(url + '?scene=' + i);
+      await page.waitForFunction(() => document.documentElement.dataset.printReady === 'true', null, {timeout:30000});
+      await page.evaluate(async () => {
+        await document.fonts.ready;
+        const sources = [...document.querySelectorAll('img, svg image')].map(el => el.src || el.getAttribute('href'));
+        await Promise.all(sources.map(src => new Promise((resolve,reject) => {
+          const img = new Image(); img.onload=resolve; img.onerror=()=>reject(new Error('Missing image: '+src)); img.src=src;
+        })));
+        await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+      });
+      const data = await page.evaluate(async () => {
+        const stage = document.querySelector('#stage').getBoundingClientRect();
+        const imgs = [...document.querySelectorAll('img')].map(img => {
+          const r=img.getBoundingClientRect(), s=getComputedStyle(img);
+          // Cover/contain uses uniform scaling; include CSS transforms in box dimensions.
+          const scale = s.objectFit==='contain' ? Math.min(r.width/img.naturalWidth,r.height/img.naturalHeight) : Math.max(r.width/img.naturalWidth,r.height/img.naturalHeight);
+          return {src:img.getAttribute('src'),width:img.naturalWidth,height:img.naturalHeight,box:[r.width,r.height],fit:s.objectFit,dpi:96/scale,filter:s.filter};
+        });
+        const technicalImages = await Promise.all([...document.querySelectorAll('svg image')].map(async el => {
+          const src=el.getAttribute('href'), img=new Image();img.src=src;await img.decode();
+          const r=el.getBoundingClientRect();
+          return {src,width:img.naturalWidth,height:img.naturalHeight,dpi:Math.min(img.naturalWidth/r.width,img.naturalHeight/r.height)*96};
+        }));
+        const text=[]; const walker=document.createTreeWalker(document.querySelector('#sceneRoot'),NodeFilter.SHOW_TEXT);
+        let node; while(node=walker.nextNode()) {
+          if (!node.textContent.trim()) continue;
+          const el=node.parentElement, s=getComputedStyle(el);
+          if(s.display==='none'||s.visibility==='hidden'||!el.getClientRects().length)continue;
+          const range=document.createRange();range.selectNodeContents(node);
+          text.push({text:node.textContent,pointSize:parseFloat(s.fontSize)*0.472441*72/96,rects:[...range.getClientRects()].map(r=>[r.x,r.y,r.width,r.height])});
+        }
+        return {text:document.querySelector('#sceneRoot').innerText,textRects:text,images:imgs,technicalImages,stage:[stage.x,stage.y,stage.width,stage.height],background:getComputedStyle(document.body).backgroundColor,sceneCount:SCENES.length,title:C.menu[Number(new URLSearchParams(location.search).get('scene'))-1]};
+      });
+      if(errors.length) throw new Error(errors.join('\n'));
+      const raw=await page.pdf({width:'210mm',height:'125mm',scale:1,printBackground:true,margin:{top:0,right:0,bottom:0,left:0},displayHeaderFooter:false,preferCSSPageSize:true});
+      const pdf=await PDFDocument.load(raw);
+      if(pdf.getPageCount()!==1)throw new Error('Scene '+i+' is not one page');
+      const p=pdf.getPage(0);
+      // Chromium rounds its paper box. Normalize only the empty outer edge;
+      // preserve vector content, typography and the exact CSS scene scale.
+      p.setMediaBox(0,0,...target);p.setCropBox(0,0,...target);p.setTrimBox(0,0,...target);
+      fs.writeFileSync(path.join(out,n+'.pdf'),await pdf.save());
+      fs.writeFileSync(path.join(qa,n+'.json'),JSON.stringify(data,null,2));
+      report.push({file:n+'.pdf',title:data.title,pages:1,mm:[210,125],images:data.images});
+      console.log(n+'.pdf: '+data.title+'; '+data.images.length+' photos/images');
+    }
+    const extras=fs.readdirSync(out).filter(f=>/^\d+\.pdf$/.test(f)&&Number(f.slice(0,-4))>count);
+    if(extras.length)throw new Error('Stale PDF files outside scene range: '+extras.join(', '));
+    fs.writeFileSync(path.join(qa,'manifest.json'),JSON.stringify(report,null,2));
+    console.log('Exported '+count+' single-page PDFs at exact 210 x 125 mm.');
+  } finally { await browser.close(); }
 }
-
-main().catch(err => {
-  console.error(err);
-  process.exit(1);
-});
+main().catch(e=>{console.error(e);process.exitCode=1;});

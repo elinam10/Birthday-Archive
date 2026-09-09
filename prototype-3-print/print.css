@@ -43,9 +43,9 @@
   --g-dim:     #536A5B;   /* вторичный текст */
   --g-faint:   #607B69;   /* самый приглушённый (совпадает с линиями) */
   --g-bright:  #173C2A;   /* заголовки / главный текст */
-  --red:       #963320;   /* затемнено для читаемости на светлом фоне */
-  --amber:     #8A6415;   /* затемнено для читаемости на светлом фоне */
-  --blue:      #2B5B8A;   /* затемнено для читаемости на светлом фоне */
+  --red:       #2B6747;   /* затемнено для читаемости на светлом фоне */
+  --amber:     #173C2A;   /* затемнено для читаемости на светлом фоне */
+  --blue:      #2B6747;   /* затемнено для читаемости на светлом фоне */
   --line:      #607B69;
   --line-soft: rgba(96,123,105,.5);
   --glow:      none;
@@ -82,7 +82,7 @@
 /* a few one-off literal hex values styles.css sets outside the token
    system (labels, badges, cutout "holes" matching the scene background) */
 .mcard .ribbon{ color:#F1F3EC !important; }               /* light text on the green ribbon badge */
-.pin.hot text{ fill:#963320 !important; }                  /* was a pale pink made for a dark background */
+.pin.hot text{ fill:#2B6747 !important; }                  /* was a pale pink made for a dark background */
 svg [fill="#030d07"]{ fill:#F1F3EC !important; }           /* dino eye + pin eyelet: cutouts matching the scene bg */
 
 /* ---------- 4. photos stay fully colored: drop every CRT tint / scan-line
@@ -141,3 +141,23 @@ body{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 @media print{
   @page{ size:210mm 125mm; margin:0; }
 }
+
+/* Reuse the project's photo fade with page-colored transparency, no tint.
+   Only the upper 17% fades; the face and existing crop remain untouched. */
+.scanbox { border:0; background:var(--bg); }
+.s3-photo { border:0; background:var(--bg); }
+.s3-photo::after { display:none; }
+.s3-photo {
+  -webkit-mask-image:linear-gradient(to bottom, transparent 0%, transparent 5%, rgba(0,0,0,.08) 8%, rgba(0,0,0,.4) 11%, rgba(0,0,0,.8) 14%, #000 17%);
+  mask-image:linear-gradient(to bottom, transparent 0%, transparent 5%, rgba(0,0,0,.08) 8%, rgba(0,0,0,.4) 11%, rgba(0,0,0,.8) 14%, #000 17%);
+}
+.caret { display:none !important; }
+/* Preserve four color cactus glyphs in a stable position. */
+.dino.in .dino-course i { animation:none !important; }
+.dino-course i:nth-child(1) { left:12%; }
+.dino-course i:nth-child(2) { left:36%; }
+.dino-course i:nth-child(3) { left:60%; }
+.dino-course i:nth-child(4) { left:84%; }
+
+/* Keep static interface notes and colored emoji legible on paper. */
+.dino, .dino-course { opacity:1 !important; }

@@ -2,7 +2,6 @@
    VERSION 41.0 — CRT terminal presentation
    ========================================================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap');
 
 :root{
   --bg:        #030d07;
@@ -169,7 +168,7 @@ body.mode-b .card.settle{ opacity:1; transform:none; }
 .term{ font-size:1.5em; line-height:1.85; letter-spacing:.045em; }
 .term .ln{ white-space:pre-wrap; }
 .term .ok{ color:var(--g); }
-.term .no{ color:var(--red); text-shadow:0 0 10px rgba(150,51,32,.55); }
+.term .no{ color:var(--red); text-shadow:0 0 10px rgba(43,103,71,.55); }
 .term .dim{ color:var(--g-dim); }
 .caret{
   display:inline-block; width:.55em; height:1.05em; background:var(--g);
@@ -220,9 +219,9 @@ body.mode-b .card.settle{ opacity:1; transform:none; }
 .s3-alert.in{ animation:alertIn .5s ease forwards; }
 .s3-alert.in.triple-flash{ animation:detectedFlash .9s steps(1,end) forwards; }
 @keyframes alertIn{ to{opacity:1} }
-@keyframes alertPulse{ 50%{ background:rgba(150,51,32,.16); box-shadow:0 0 26px rgba(150,51,32,.4);} }
+@keyframes alertPulse{ 50%{ background:rgba(43,103,71,.16); box-shadow:0 0 26px rgba(43,103,71,.4);} }
 @keyframes detectedFlash{
-  0%,16%,34%,50%,68%,84%,100%{ opacity:1; background:rgba(150,51,32,.16); box-shadow:0 0 26px rgba(150,51,32,.4); }
+  0%,16%,34%,50%,68%,84%,100%{ opacity:1; background:rgba(43,103,71,.16); box-shadow:0 0 26px rgba(43,103,71,.4); }
   17%,33%,51%,67%,85%,96%{ opacity:.08; background:transparent; box-shadow:none; }
 }
 
@@ -435,9 +434,9 @@ body.mode-b .card.settle{ opacity:1; transform:none; }
 .pin text{ fill:var(--g-bright); font-size:15px; letter-spacing:1.5px; font-family:inherit; }
 .pin rect{ fill:rgba(241,243,236,.8); stroke:var(--line); }
 .pin path.leader{ fill:none; stroke:var(--g-mid); stroke-width:1.4; opacity:.75; }
-.pin.hot path{ fill:var(--red); filter:drop-shadow(0 0 8px rgba(150,51,32,.9)); }
+.pin.hot path{ fill:var(--red); filter:drop-shadow(0 0 8px rgba(43,103,71,.9)); }
 .pin.hot text{ fill:#ffd9d2; }
-.pin.hot rect{ stroke:rgba(150,51,32,.6); }
+.pin.hot rect{ stroke:rgba(43,103,71,.6); }
 .pin.city path{ fill:var(--g-bright); }
 .pin.city.approach .pin-anim{ animation:pinApproach 1.2s ease; }
 @keyframes pinApproach{
@@ -452,7 +451,7 @@ body.mode-b .card.settle{ opacity:1; transform:none; }
 .mapbox--zoomin.in{ opacity:1; transform:none; }
 .s6-panel{ border:1px solid var(--line); padding:14px 18px; font-size:.95em; line-height:1.75; letter-spacing:.05em; }
 .s6-panel .h{ color:var(--g-dim); letter-spacing:.16em; font-size:.86em; margin-bottom:6px; }
-.s6-hot{ border-color:rgba(150,51,32,.5); }
+.s6-hot{ border-color:rgba(43,103,71,.5); }
 .s6-hot .t{ color:var(--red); font-size:1.5em; font-weight:700; letter-spacing:.12em; }
 
 /* ============================ SCENE 7 ============================ */
@@ -591,12 +590,12 @@ body.mode-b .card.settle{ opacity:1; transform:none; }
 .statrow .v{ color:var(--g-bright); font-weight:500; white-space:nowrap; }
 
 .coffee{
-  border:1px solid rgba(138,100,21,.45); background:rgba(138,100,21,.06);
+  border:1px solid rgba(43,103,71,.45); background:rgba(43,103,71,.06);
   padding:12px 16px; margin:12px 0; text-align:center;
 }
 .coffee .cl{ font-size:.78em; letter-spacing:.18em; color:var(--amber); }
 .coffee .cv{ font-size:3.1em; font-weight:700; color:var(--amber); line-height:1.1;
-             text-shadow:0 0 20px rgba(138,100,21,.5); }
+             text-shadow:0 0 20px rgba(43,103,71,.5); }
 .coffee .cu{ font-size:.86em; letter-spacing:.16em; color:var(--amber); }
 .coffee .alert{ font-size:.72em; letter-spacing:.22em; color:var(--red); margin-top:4px; opacity:0; }
 .coffee .alert.in{ opacity:1; animation:alertPulse 1s ease-in-out 3; }
