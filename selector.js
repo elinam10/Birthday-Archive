@@ -3,7 +3,7 @@ const ctx = canvas.getContext('2d');
 const glyphs = '01アイウエオカキクケコサシスセソЖДЙФΣλ{}[]<>/';
 let cols = [];
 
-document.querySelector('#prototypeVersionLabel').textContent = 'ПРОТОТИП ' + window.PROTOTYPE_VERSION;
+document.querySelector('#prototypeVersionLabel').textContent = 'PROTOTYPE ' + window.PROTOTYPE_VERSION;
 document.querySelector('#activeBuild').textContent = window.PROTOTYPE_VERSION;
 
 function resize() {
