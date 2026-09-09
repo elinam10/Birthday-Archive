@@ -345,9 +345,10 @@ const SC4 = {
   },
   async play(ctx, r) {
     await type(ctx, r.H.t, C.s4.title, 28); show(r.H.rule);
-    await ctx.wait(1300);
-    show(r.meta);
+    await ctx.wait(620);
     Snd.play('music');
+    await ctx.wait(680); // начальная тишина трека перед YEAR IN REVIEW
+    show(r.meta);
     await ctx.wait(520);
     for (let i = 0; i < r.cards.length; i++) {
       const c = r.cards[i];
