@@ -1,0 +1,143 @@
+/* =========================================================================
+   PRINT OVERRIDE STYLESHEET
+   Loaded AFTER styles.css (unchanged copy of the web version's stylesheet).
+   Re-themes the terminal/archive look for a light, printable page and
+   strips every screen-only CRT effect. Structure, typography, spacing and
+   composition rules in styles.css are left completely untouched -- this
+   file only touches color and removes motion/glow.
+   ========================================================================= */
+
+@font-face{
+  font-family:'Roboto Mono';
+  font-style:normal; font-weight:300; font-display:swap;
+  src:url('fonts/RobotoMono-300.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Roboto Mono';
+  font-style:normal; font-weight:400; font-display:swap;
+  src:url('fonts/RobotoMono-400.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Roboto Mono';
+  font-style:normal; font-weight:500; font-display:swap;
+  src:url('fonts/RobotoMono-500.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Roboto Mono';
+  font-style:normal; font-weight:700; font-display:swap;
+  src:url('fonts/RobotoMono-700.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Roboto Mono';
+  font-style:italic; font-weight:400; font-display:swap;
+  src:url('fonts/RobotoMono-400italic.woff2') format('woff2');
+}
+
+/* ---------- 1. print palette (overrides the design tokens in styles.css) ---------- */
+:root{
+  --bg:        #F1F3EC;
+  --bg-deep:   #F1F3EC;
+  --panel:     rgba(96,123,105,.06);
+  --g:         #294B38;   /* основной текст */
+  --g-mid:     #2B6747;   /* акцентный зелёный */
+  --g-dim:     #536A5B;   /* вторичный текст */
+  --g-faint:   #607B69;   /* самый приглушённый (совпадает с линиями) */
+  --g-bright:  #173C2A;   /* заголовки / главный текст */
+  --red:       #963320;   /* затемнено для читаемости на светлом фоне */
+  --amber:     #8A6415;   /* затемнено для читаемости на светлом фоне */
+  --blue:      #2B5B8A;   /* затемнено для читаемости на светлом фоне */
+  --line:      #607B69;
+  --line-soft: rgba(96,123,105,.5);
+  --glow:      none;
+}
+
+/* ---------- 2. nuke every screen-only CRT/glow effect, everywhere ----------
+   text-shadow/box-shadow/filter are used in this project exclusively for
+   green glow, drop-shadow halos and photo tinting -- never for anything
+   load-bearing -- so a blanket reset is safe. Transitions are removed
+   outright (safe: the resolved value doesn't depend on transition at all,
+   only the animation *to* it). Keyframe animations keep running but with
+   0 duration, so animation-fill-mode is respected and any "forwards"
+   animation still lands on its final frame instead of reverting to a
+   pre-animation hidden state. */
+*, *::before, *::after{
+  text-shadow:none !important;
+  box-shadow:none !important;
+  filter:none !important;
+  backdrop-filter:none !important;
+  transition:none !important;
+  animation-duration:0s !important;
+  animation-delay:0s !important;
+}
+
+/* ---------- 3. hardcoded colors that don't go through the tokens above ---------- */
+
+/* every rgba(78,240,138,X) / rgba(53,184,105,X) / rgba(255,93,71,X) /
+   rgba(255,200,90,X) / rgba(3,13,7,X) triplet in THIS COPY of styles.css
+   (never in prototype-3/styles.css) has already been rewritten in place to
+   the matching print color at the same original alpha, so translucent
+   tints, SVG fills/strokes and glow colors land in the print palette even
+   where the source authored a literal color instead of a var(). */
+
+/* a few one-off literal hex values styles.css sets outside the token
+   system (labels, badges, cutout "holes" matching the scene background) */
+.mcard .ribbon{ color:#F1F3EC !important; }               /* light text on the green ribbon badge */
+.pin.hot text{ fill:#963320 !important; }                  /* was a pale pink made for a dark background */
+svg [fill="#030d07"]{ fill:#F1F3EC !important; }           /* dino eye + pin eyelet: cutouts matching the scene bg */
+
+/* ---------- 4. photos stay fully colored: drop every CRT tint / scan-line
+   overlay and grayscale/tint filter that was designed for a dark screen ---------- */
+.photo.has-img::before{ content:none !important; }
+.s3-photo img{ filter:none !important; }                   /* was grayscale(1) brightness(1.08) contrast(1.42) */
+
+/* letterbox fallback color behind contain-fit photos (only visible in the
+   gutters around an image that doesn't fill its box) */
+.mcard--photo-only,
+.s5-block .photo img,
+.s3-photo img,
+.s5-collage > div img{ background:#F1F3EC !important; }
+
+/* ---------- 5. screen-only decorative flourishes with no static final
+   state worth freezing on a random frame ---------- */
+.scanline{ display:none !important; }                      /* transient scanning-beam effect */
+.s5-logo::after{ display:none !important; }                 /* white "glitch" highlight over the logo */
+.photo .zoom{ display:none !important; }                    /* hover-only affordance, meaningless in print */
+#fireworks{ display:none !important; }                      /* Scene 10's live particle burst -- no single frame worth freezing */
+
+/* ---------- 6. physical page ----------
+   One scene per page, 210x125mm exactly, laid out with a 5mm safe margin
+   on every side. The scene canvas is authored at a fixed 1600x900 design
+   size (see #stage in styles.css) and scaled uniformly (contain, no
+   cropping/stretching) to fill the remaining 200x115mm content area,
+   centered -- the same fixed transform for every scene, so nothing shifts
+   page to page. 1600px/900px design canvas at the CSS-standard 96dpi
+   reference equals 423.333mm/238.125mm; 200mm/423.333mm = 0.472441 is the
+   width-constrained scale (rendered canvas ends up 200 x 112.5mm, with
+   1.25mm of extra letterboxing top and bottom, still inside the 115mm
+   height budget). */
+html, body{ margin:0; padding:0; background:#F1F3EC; }
+body{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+
+.print-page{
+  width:210mm; height:125mm;
+  position:relative;
+  overflow:hidden;
+  background:#F1F3EC;
+}
+
+#stage{
+  position:absolute; left:0; top:0;
+  transform-origin:top left;
+  transform:translate(5mm, 6.25mm) scale(0.472441);
+}
+/* the web version's CRT scanline + vignette overlays on #stage itself */
+#stage::before, #stage::after{ display:none !important; }
+
+/* build() always overwrites className on the scene root without the
+   "active" class app.js normally adds when switching scenes -- force it
+   visible directly instead of relying on that class ever being present */
+#sceneRoot{ display:flex !important; }
+
+@media print{
+  @page{ size:210mm 125mm; margin:0; }
+}

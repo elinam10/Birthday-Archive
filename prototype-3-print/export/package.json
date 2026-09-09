@@ -1,0 +1,13 @@
+{
+  "name": "birthday-archive-print-export",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Exports each scene of the Birthday Archive print edition to its own 210x125mm single-page PDF.",
+  "type": "module",
+  "scripts": {
+    "export:pdf": "node export-pdf.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.48.0"
+  }
+}

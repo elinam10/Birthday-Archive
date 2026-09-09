@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#080b0a" />
+    <title>José Antonio — Version 42.0</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="noise" aria-hidden="true"></div>
+
+    <main class="computer" aria-label="Personal archive terminal">
+      <header class="computer__header">
+        <div class="brand"><span class="status-dot"></span> PERSONAL ARCHIVE OS</div>
+        <div class="clock" id="clock">19:09:2026</div>
+      </header>
+
+      <section class="screen" id="screen">
+        <div class="scanlines" aria-hidden="true"></div>
+
+        <section class="boot" id="boot">
+          <p class="eyebrow">PERSONAL ARCHIVE / SECURE ACCESS</p>
+          <h1>JOSÉ ANTONIO<br />CUENCA CAÑO</h1>
+          <p class="version">CURRENT VERSION <strong>41.0</strong></p>
+
+          <div class="boot-log" id="bootLog" aria-live="polite"></div>
+          <button class="terminal-button" id="startButton" type="button">
+            [ INITIALIZE SYSTEM ]
+          </button>
+          <p class="microcopy">Audio can be enabled after launch · Press Enter to start</p>
+        </section>
+
+        <section class="desktop" id="desktop" hidden>
+          <nav class="dock" aria-label="Archive sections">
+            <button class="dock__item is-active" data-scene="0">01 <span>Archive</span></button>
+            <button class="dock__item" data-scene="1">02 <span>Year</span></button>
+            <button class="dock__item" data-scene="2">03 <span>Connections</span></button>
+            <button class="dock__item" data-scene="3">04 <span>Statistics</span></button>
+            <button class="dock__item" data-scene="4">05 <span>Update</span></button>
+          </nav>
+
+          <div class="workspace">
+            <div class="terminal-trace" id="terminalTrace">&gt; ARCHIVE SESSION ACTIVE</div>
+
+            <article class="window scene is-visible" data-scene="0">
+              <header class="window__bar">
+                <span>subject_profile.exe</span>
+                <div class="window__controls"><i></i><i></i><i></i></div>
+              </header>
+              <div class="window__body profile">
+                <div>
+                  <p class="window-label">SUBJECT IDENTIFIED</p>
+                  <h2>GET TO KNOW<br />JOSÉ ANTONIO<br />CUENCA CAÑO</h2>
+                  <p class="lead">A personal archive of places, people, achievements and wonderfully random facts.</p>
+                </div>
+                <div class="identity-card">
+                  <div class="portrait-placeholder"><span>PHOTO<br />SCAN</span></div>
+                  <dl>
+                    <div><dt>FIRST RELEASE</dt><dd>19.09.1984</dd></div>
+                    <div><dt>CURRENT VERSION</dt><dd>41.0</dd></div>
+                    <div><dt>UPDATE STATUS</dt><dd class="accent">PENDING</dd></div>
+                  </dl>
+                </div>
+              </div>
+            </article>
+
+            <article class="window scene" data-scene="1">
+              <header class="window__bar"><span>year_in_review.plan</span><div class="window__controls"><i></i><i></i><i></i></div></header>
+              <div class="window__body">
+                <p class="window-label">12 MONTHS OF VERSION 41.0</p>
+                <h2 class="compact-title">YEAR IN REVIEW</h2>
+                <div class="months">
+                  <div class="month is-muted"><b>OCT–NOV</b><span>DATA MISSED</span></div>
+                  <div class="month"><b>DEC</b><span>🐶 New idea</span></div>
+                  <div class="month"><b>JAN</b><span>🔄 Plan updated</span></div>
+                  <div class="month"><b>FEB</b><span>💘 Quest started</span></div>
+                  <div class="month"><b>MAR</b><span>💋 Achievement</span></div>
+                  <div class="month"><b>APR</b><span>🛥️ Sailing</span></div>
+                  <div class="month"><b>MAY</b><span>📚 Study mode</span></div>
+                  <div class="month"><b>JUN</b><span>🏆 License</span></div>
+                  <div class="month"><b>JUL</b><span>⚽ Hard mode</span></div>
+                  <div class="month"><b>AUG</b><span>🏖️ Chill mode</span></div>
+                  <div class="month is-accent"><b>SEP</b><span>🎂 New release</span></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="window scene" data-scene="2">
+              <header class="window__bar"><span>connections.db</span><div class="window__controls"><i></i><i></i><i></i></div></header>
+              <div class="window__body">
+                <p class="window-label">PEOPLE AND CONNECTIONS</p>
+                <h2 class="compact-title">4 OF 4 CONNECTIONS ACTIVE</h2>
+                <div class="connection-grid">
+                  <div class="connection-card"><span>01</span><div class="photo-slot"></div><b>FAMILY</b><small>IMPORTANCE: HIGH</small></div>
+                  <div class="connection-card"><span>02</span><div class="photo-slot"></div><b>COLLEAGUES</b><small>CONNECTION: ACTIVE</small></div>
+                  <div class="connection-card"><span>03</span><div class="photo-slot"></div><b>FRIENDSHIP</b><small>LEVEL: HIGH</small></div>
+                  <div class="connection-card"><span>04</span><div class="photo-slot"></div><b>RELATIONSHIP</b><small>SKILL LEVEL: MAX</small></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="window scene" data-scene="3">
+              <header class="window__bar"><span>numbers_and_statistics.csv</span><div class="window__controls"><i></i><i></i><i></i></div></header>
+              <div class="window__body statistics">
+                <div>
+                  <p class="window-label">NUMBERS & STATISTICS</p>
+                  <h2 class="compact-title">KEY STATISTICS</h2>
+                  <div class="stat-list">
+                    <div><span>COFFEE CONSUMED</span><b data-count="1113">0</b><i>CUPS</i></div>
+                    <div><span>DRIVING DISTANCE</span><b data-count="10923">0</b><i>KM</i></div>
+                    <div><span>STEPS TAKEN</span><b data-count="999999">0</b><i>STEPS</i></div>
+                    <div><span>NEW PLACES</span><b data-count="8">0</b><i>FOUND</i></div>
+                  </div>
+                </div>
+                <div class="chart-panel">
+                  <span>LIFESTYLE SHIFT DETECTED</span>
+                  <div class="bars"><i style="--h:42%"></i><i style="--h:58%"></i><i style="--h:48%"></i><i style="--h:75%"></i><i style="--h:67%"></i><i style="--h:88%"></i><i style="--h:76%"></i><i style="--h:94%"></i></div>
+                  <small>APRIL 2026 → SEPTEMBER 2026</small>
+                </div>
+              </div>
+            </article>
+
+            <article class="window scene scene--final" data-scene="4">
+              <header class="window__bar"><span>system_update.pkg</span><div class="window__controls"><i></i><i></i><i></i></div></header>
+              <div class="window__body update-panel">
+                <p class="window-label">INSTALL UPDATE?</p>
+                <h2>VERSION 42.0</h2>
+                <div class="progress"><i id="progressBar"></i></div>
+                <p class="progress-label"><span>INSTALLING BEAUTIFUL MEMORIES...</span><b id="progressValue">0%</b></p>
+                <div class="update-success" id="updateSuccess">
+                  <strong>VERSION 42.0 SUCCESSFULLY INSTALLED</strong>
+                  <h3>HAPPY BIRTHDAY,<br />JOSÉ ANTONIO!</h3>
+                  <p>THE BEST IS YET TO COME. ❤️</p>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <footer class="playback">
+            <button id="prevButton" aria-label="Previous scene">←</button>
+            <button id="playButton" aria-label="Pause automatic playback">Ⅱ</button>
+            <div class="timeline"><i id="timelineProgress"></i></div>
+            <span id="sceneCounter">01 / 05</span>
+            <button id="nextButton" aria-label="Next scene">→</button>
+          </footer>
+        </section>
+      </section>
+    </main>
+
+    <audio id="prototypeMusic" src="../assets/sounds/rick-and-morty-intro.mp3" preload="metadata"></audio>
+    <script src="../assets/audio-control.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

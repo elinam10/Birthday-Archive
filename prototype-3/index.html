@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#030d07" />
+    <title>José Antonio — Version 41.0 Archive</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+
+    <div id="shell">
+      <div id="viewport">
+        <main id="stage" aria-label="Personal archive terminal">
+
+          <div class="frame"><i></i><i></i><i></i><i></i></div>
+          <div id="flicker"></div>
+
+          <div class="hud hud--tl"><span>SYS-41</span></div>
+          <div class="hud hud--tr">
+            <span id="hudScene">BOOT SEQUENCE 01</span>
+            <span class="blocks" id="hudBlocks"><b></b><b></b><b></b><b></b><b></b></span>
+          </div>
+          <div class="hud hud--bl">SYSTEM STATUS: STABLE</div>
+          <div class="hud hud--br" id="hudTime">EST. TIME: 00:00:00</div>
+
+          <div id="scenes"></div>
+
+          <!-- пауза 7–10 c между кадром 9 и кадром 10 -->
+          <div id="gap">. . .</div>
+
+        </main>
+      </div>
+
+      <!-- панель управления -->
+      <nav id="bar" aria-label="Playback controls">
+        <button id="btnPrev"   type="button" title="Предыдущий кадр (←)">◀ PREV</button>
+        <button id="btnPause"  type="button" title="Пауза / продолжить (Space)">❚❚ PAUSE</button>
+        <button id="btnNext"   type="button" title="Следующий кадр (→)">NEXT ▶</button>
+        <button id="btnReplay" type="button" title="Повторить кадр (R)">⟲ REPLAY</button>
+        <span id="dots"></span>
+        <span class="sp"></span>
+        <button id="btnAuto"  class="on" type="button" title="Автовоспроизведение">AUTO: ON</button>
+        <button id="btnSpeed" type="button" title="Скорость">SPEED 1×</button>
+        <button id="btnMenu"  type="button" title="Список кадров">☰ SCENES</button>
+        <button id="btnRecord" type="button" title="Запись экрана — после остановки видео скачается автоматически">● REC</button>
+        <a href="../" class="back" title="Вернуться в архив">← ARCHIVE</a>
+      </nav>
+    </div>
+
+    <!-- окно с фотографией -->
+    <div id="win" role="dialog" aria-modal="true" aria-label="Photo viewer">
+      <div class="win">
+        <div class="bar">
+          <span id="winTitle">IMAGE.JPG</span>
+          <span class="btns"><i></i><i></i></span>
+          <button class="x" id="winClose" type="button" aria-label="Close">×</button>
+        </div>
+        <div class="body" id="winBody"></div>
+        <div class="foot" id="winFoot"></div>
+      </div>
+    </div>
+
+    <!-- список кадров -->
+    <div id="menu" role="dialog" aria-modal="true" aria-label="Scene list">
+      <div class="list">
+        <h3>SCENE INDEX</h3>
+        <div id="menuList"></div>
+      </div>
+    </div>
+
+    <script src="../assets/audio-control.js"></script>
+    <script src="version.js"></script>
+    <script src="content.js"></script>
+    <script src="engine.js"></script>
+    <script src="scenes.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

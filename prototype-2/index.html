@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#040806" />
+    <title>José Antonio — Live Archive</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="noise"></div><div class="scanlines"></div>
+    <main class="archive" id="archive">
+      <header class="topbar">
+        <span><i></i> PERSONAL ARCHIVE / LIVE PROCESS</span>
+        <span id="systemTime">00:00:00</span>
+      </header>
+
+      <section class="start-screen" id="startScreen">
+        <p>UNSUPERVISED ARCHIVE RECONSTRUCTION</p>
+        <h1>VERSION<br /><b>41.0</b></h1>
+        <button id="startButton">[ START LIVE PROCESS ]</button>
+        <small>THE SYSTEM WILL CONTINUE AUTOMATICALLY</small>
+      </section>
+
+      <section class="live-stage" id="liveStage" hidden>
+        <aside class="log-panel">
+          <div class="log-panel__title">SYSTEM LOG</div>
+          <div id="systemLog" class="system-log"></div>
+          <div class="signal"><span>SIGNAL</span><i></i><i></i><i></i><i></i><i></i></div>
+        </aside>
+
+        <div class="canvas" id="canvas">
+          <div class="phase-label"><span id="phaseNumber">01</span><b id="phaseName">IDENTIFICATION</b></div>
+
+          <section class="phase phase--identity is-active" data-phase="0">
+            <div class="target-frame">
+              <div class="portrait"><span>PORTRAIT<br />SOURCE</span><i class="scanner"></i></div>
+              <div class="target-corners"></div>
+            </div>
+            <div class="identity-copy">
+              <p>SUBJECT IDENTIFIED</p>
+              <h2>JOSÉ ANTONIO<br />CUENCA CAÑO</h2>
+              <dl><div><dt>FIRST RELEASE</dt><dd>19.09.1984</dd></div><div><dt>CURRENT VERSION</dt><dd>41.0</dd></div><div><dt>VERIFICATION</dt><dd>ACCEPTED ✓</dd></div></dl>
+            </div>
+          </section>
+
+          <section class="phase phase--photos" data-phase="1">
+            <div class="photo photo--one"><span>PHOTO 01</span><b>MÁLAGA</b></div>
+            <div class="photo photo--two"><span>PHOTO 02</span><b>PEOPLE</b></div>
+            <div class="photo photo--three"><span>PHOTO 03</span><b>SAILING</b></div>
+            <div class="photo photo--four"><span>PHOTO 04</span><b>MEMORY</b></div>
+            <div class="photo-caption"><small>VISUAL EVIDENCE FOUND</small><strong>MEMORIES<br />RECOVERED</strong><em id="photoCount">0 / 4</em></div>
+          </section>
+
+          <section class="phase phase--timeline" data-phase="2">
+            <p class="overline">YEAR IN REVIEW / DATA RECONSTRUCTION</p>
+            <h2>12 MONTHS OF<br />VERSION 41.0</h2>
+            <div class="timeline-stream">
+              <div><b>DEC</b><span>🐶 NEW IDEA DETECTED</span></div>
+              <div><b>FEB</b><span>💘 QUEST STARTED</span></div>
+              <div><b>APR</b><span>🛥️ SAILING TRAINING</span></div>
+              <div><b>JUN</b><span>🏆 LICENSE UNLOCKED</span></div>
+              <div><b>AUG</b><span>🏖️ CHILL MODE</span></div>
+              <div><b>SEP</b><span>🎂 UPDATE READY</span></div>
+            </div>
+          </section>
+
+          <section class="phase phase--network" data-phase="3">
+            <div class="network-core"><span>J.A.</span></div>
+            <div class="node node--family"><i></i><b>FAMILY</b><small>IMPORTANCE: HIGH</small></div>
+            <div class="node node--friends"><i></i><b>FRIENDS</b><small>LEVEL: HIGH</small></div>
+            <div class="node node--work"><i></i><b>COLLEAGUES</b><small>ACTIVE</small></div>
+            <div class="node node--love"><i></i><b>RELATIONSHIP</b><small>LEVEL: MAX</small></div>
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M50 50L20 20M50 50L80 20M50 50L18 80M50 50L82 80" /></svg>
+            <p>4 OF 4 CONNECTIONS ACTIVE ✓</p>
+          </section>
+
+          <section class="phase phase--numbers" data-phase="4">
+            <p class="overline">CALCULATING IMPROBABLE STATISTICS</p>
+            <div class="mega-stat"><b data-target="1113">0</b><span>CUPS OF COFFEE</span></div>
+            <div class="number-grid">
+              <div><b data-target="10923">0</b><span>KM DRIVEN</span></div>
+              <div><b data-target="999999">0</b><span>STEPS</span></div>
+              <div><b data-target="8">0</b><span>NEW PLACES</span></div>
+              <div><b data-target="0">0</b><span>OLIVES EATEN</span></div>
+            </div>
+          </section>
+
+          <section class="phase phase--update" data-phase="5">
+            <p>ARCHIVE COMPLETE / NEW PACKAGE DETECTED</p>
+            <h2>INSTALLING<br /><b>VERSION 42.0</b></h2>
+            <div class="update-bar"><i id="updateBar"></i></div>
+            <div class="update-value"><span>NEW BEAUTIFUL MEMORIES</span><b id="updateValue">0%</b></div>
+            <div class="birthday" id="birthday"><small>INSTALLATION SUCCESSFUL</small><strong>HAPPY BIRTHDAY,<br />JOSÉ ANTONIO!</strong><span>THE BEST IS YET TO COME. ❤️</span></div>
+          </section>
+        </div>
+
+        <footer class="process-bar"><span>AUTOMATIC PROCESS</span><div><i id="processProgress"></i></div><b id="processState">RUNNING</b></footer>
+      </section>
+    </main>
+    <audio id="prototypeMusic" src="../assets/sounds/matrix-clubbed-to-death.mp3" preload="metadata"></audio>
+    <script src="../assets/audio-control.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
